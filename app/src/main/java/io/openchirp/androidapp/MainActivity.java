@@ -8,7 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +26,27 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpHost;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.util.EntityUtils;
+
+import okhttp3.OkHttpClient;
+
 
 /**
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
@@ -31,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_GET_TOKEN = 9002;
+    private static String ID_TOKEN = null;
 
     String default_web_client_ID = "8799600805-r708mvl77fe1f5fu71r6sbo366m6e7r5.apps.googleusercontent.com";
 
@@ -50,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
+
+        validateServerClientID();
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -157,7 +188,77 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(TAG, "Photo:" + personPhoto);
 
             String idToken = acct.getIdToken();
+            ID_TOKEN = acct.getIdToken();
             Log.d(TAG, "IDToken:" + idToken);
+
+//            //HttpClient httpClient = new DefaultHttpClient();
+//            OkHttpClient httpclient = new OkHttpClient();
+//
+//            HttpPost httpPost = new HttpPost("http://openchirp.andrew.cmu.edu:7000/auth/google/callback");
+//            Log.d("Http", "Http Client and Post entered");
+//            List nameValuePairs = new ArrayList(1);
+//            nameValuePairs.add(new BasicNameValuePair("idToken", ID_TOKEN));
+//            try {
+//                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+//
+//            HttpResponse response = null;
+//            try {
+//                //response = httpClient.execute(httpPost);
+//
+//                response = httpclient.newCall(request).execute();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            int statusCode = response.getStatusLine().getStatusCode();
+//            final String responseBody;
+//            try {
+//                responseBody = EntityUtils.toString(response.getEntity());
+//                Log.i(TAG, "Signed in as: " + responseBody);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+            //String url = "http://openchirp.andrew.cmu.edu:7000/auth/google/callback";
+
+            //String url = "http://openchirp.andrew.cmu.edu";
+
+            String url = "http://iot.andrew.cmu.edu:10010";
+
+            final RequestQueue queue = Volley.newRequestQueue(this);
+
+            JSONObject postMessage = new JSONObject();
+
+            try {
+                postMessage.put("IDToken", idToken);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, postMessage,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            Log.d("Response", response.toString());
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                            Log.d("Error.Response", error.toString());
+                        }
+                    }
+            );
+
+// add it to the RequestQueue
+            queue.add(postRequest);
 
             mStatusTextView.setText(acct.getDisplayName());
 
@@ -245,6 +346,21 @@ public class MainActivity extends AppCompatActivity implements
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+        }
+    }
+
+    private void validateServerClientID() {
+        //String serverClientId = getString(R.string.server_client_id);
+        String serverClientId = default_web_client_ID;
+        String suffix = ".apps.googleusercontent.com";
+        String message1 = "Server client ID validated";
+        Log.w(TAG, message1);
+        Toast.makeText(this, message1, Toast.LENGTH_LONG).show();
+
+        if (!serverClientId.trim().endsWith(suffix)) {
+            String message = "Invalid server client ID in strings.xml, must end with " + suffix;
+            Log.w(TAG, message);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
