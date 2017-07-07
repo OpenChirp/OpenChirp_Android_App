@@ -28,6 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="io.openchirp.androidapp.SignInActivity" />
+        <activity android:name="io.openchirp.androidapp.StringRequestActivity" />
+        <activity android:name="io.openchirp.androidapp.UserActivity" />
+        <activity android:name="io.openchirp.androidapp.ServicesActivity" />
+        <activity android:name="io.openchirp.androidapp.DevicesActivity" />
+        <activity android:name="io.openchirp.androidapp.LocationActivity" />
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
             android:excludeFromRecents="true"

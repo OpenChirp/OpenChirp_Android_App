@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.android.volley.toolbox.*;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,10 +19,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent1 = new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(intent1);
-//                Intent intent2 = new Intent(MainActivity.this, StringRequest.class);
-//                startActivity(intent2);
-//                Intent intent3 = new Intent(MainActivity.this, CookieActivity.class);
-//                startActivity(intent3);
             }
         });
 

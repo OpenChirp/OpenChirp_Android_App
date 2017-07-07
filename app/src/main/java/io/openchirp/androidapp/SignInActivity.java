@@ -1,12 +1,14 @@
 package io.openchirp.androidapp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +37,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpHost;
@@ -77,6 +83,9 @@ public class SignInActivity extends AppCompatActivity implements
     private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
 
+    OpenChirpHelper openChirpHelper = new OpenChirpHelper();
+    private Context objContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +100,14 @@ public class SignInActivity extends AppCompatActivity implements
         findViewById(R.id.disconnect_button).setOnClickListener(this);
 
         validateServerClientID();
+
+        Button dashboard_button = (Button)findViewById(R.id.dashboard_button);
+        dashboard_button.setOnClickListener(new View.OnClickListener(){
+            public void onClick (View v){
+                Intent intent1 = new Intent(SignInActivity.this, UserActivity.class);
+                startActivity(intent1);
+            }
+        });
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
@@ -115,6 +132,7 @@ public class SignInActivity extends AppCompatActivity implements
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         // [END customize_button]
+
     }
 
     private void getIdToken() {
@@ -137,7 +155,11 @@ public class SignInActivity extends AppCompatActivity implements
             // and the GoogleSignInResult will be available instantly.
             Log.d(TAG, "Got cached sign-in");
             GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
+            try {
+                handleSignInResult(result);
+            } catch (ExecutionException | InterruptedException | JSONException e) {
+                e.printStackTrace();
+            }
         } else {
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
@@ -147,7 +169,15 @@ public class SignInActivity extends AppCompatActivity implements
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
                     hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
+                    try {
+                        handleSignInResult(googleSignInResult);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -167,13 +197,21 @@ public class SignInActivity extends AppCompatActivity implements
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            try {
+                handleSignInResult(result);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
     // [END onActivityResult]
 
     // [START handleSignInResult]
-    private void handleSignInResult(GoogleSignInResult result) {
+    private void handleSignInResult(GoogleSignInResult result) throws ExecutionException, InterruptedException, JSONException {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
@@ -201,139 +239,76 @@ public class SignInActivity extends AppCompatActivity implements
             ID_TOKEN = acct.getIdToken();
             Log.d(TAG, "IDToken:" + id_token);
 
-//            HttpClient httpClient = new DefaultHttpClient();
-//            HttpPost httpPost = new HttpPost("http://iot.andrew.cmu.edu:10010/auth/google/token");
-//
-//            try {
-//                List nameValuePairs = new ArrayList(1);
-//                nameValuePairs.add(new BasicNameValuePair("idToken", id_token));
-//                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//                HttpResponse response = httpClient.execute(httpPost);
-//                int statusCode = response.getStatusLine().getStatusCode();
-//                final String responseBody = EntityUtils.toString(response.getEntity());
-//                Log.i(TAG, "Signed in as: " + responseBody);
-//            } catch (ClientProtocolException e) {
-//                Log.e(TAG, "Error sending ID token to backend.", e);
-//            } catch (IOException e) {
-//                Log.e(TAG, "Error sending ID token to backend.", e);
-//            }
-            //String url = "http://openchirp.andrew.cmu.edu:7000/auth/google/callback";
+            Log.d(TAG, "Started HttpUrlConnection");
 
-            //String url = "http://openchirp.andrew.cmu.edu";
+            String url = "http://iot.andrew.cmu.edu:10010/auth/google/token";
 
-//            String url = "http://iot.andrew.cmu.edu:10010/auth/google/token";
-//
+            JSONObject postMessage = new JSONObject();
+
+            try {
+                postMessage.put("idToken", id_token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject resp =  openChirpHelper.PostOpenChirp(url, postMessage);
+            Log.d(TAG, resp.toString());
+
+            Log.d(TAG, "Ended HttpUrlConnection");
+
+            CookieManager cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
+            CookieHandler.setDefault(cmrCookieMan);
+            Log.d(TAG, cmrCookieMan.toString());
+
 //            final RequestQueue queue = Volley.newRequestQueue(this);
 //
-//            JSONObject postMessage = new JSONObject();
+//            String url = "http://iot.andrew.cmu.edu:10010/auth/google/token";
 //
+//            JSONObject postMessage = new JSONObject();
 //            try {
-//                postMessage.put("idToken", id_token);
+//                postMessage.put("id_token", id_token);
 //            } catch (JSONException e) {
 //                e.printStackTrace();
 //            }
+
+//            final String requestBody = postMessage.toString();
 //
-//            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, postMessage,
-//                    new Response.Listener<JSONObject>()
+//            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+//                    new Response.Listener<String>()
 //                    {
 //                        @Override
-//                        public void onResponse(JSONObject response) {
+//                        public void onResponse(String response) {
+//                            // response
+//                            Log.d("Response", response);
+//                            response_volley = response;
 //
-//                            VolleyLog.d("Response", response.toString());
 //                        }
 //                    },
 //                    new Response.ErrorListener()
 //                    {
 //                        @Override
 //                        public void onErrorResponse(VolleyError error) {
-//
-//                            VolleyLog.d("Error.Response", error.toString());
+//                            // error
+//                            Log.d("Error.Response", error.toString());
 //                        }
 //                    }
 //            )
 //            {
 //                @Override
-//                public Map<String, String> getHeaders() throws AuthFailureError {
-//                    Map<String,String> params = new HashMap<String, String>();
-//                    params.put("Content-Type","application/json");
-//                    return params;
+//                public String getBodyContentType() {
+//                    return "application/json; charset=utf-8";
 //                }
-//            };
-//            try {
-//                Log.d("Request Headers:", postRequest.getHeaders().toString());
-//                Log.d("Request Body:", postRequest.getBody().toString());
-//            } catch (AuthFailureError authFailureError) {
-//                authFailureError.printStackTrace();
-//            }
 //
-//// add it to the RequestQueue
-//            queue.add(postRequest);
-
-            final RequestQueue queue = Volley.newRequestQueue(this);
-
-            //String url = "http://iot.andrew.cmu.edu:10010/auth/google/token?id_token=" +id_token;
-            String url = "http://iot.andrew.cmu.edu:10010/auth/google/token";
-
-
-            JSONObject postMessage = new JSONObject();
-
-            try {
-                postMessage.put("id_token", id_token);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            final String requestBody = postMessage.toString();
-
-            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>()
-                    {
-                        @Override
-                        public void onResponse(String response) {
-                            // response
-                            Log.d("Response", response);
-                            response_volley = response;
-
-                        }
-                    },
-                    new Response.ErrorListener()
-                    {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // error
-                            Log.d("Error.Response", error.toString());
-                        }
-                    }
-            )
-            {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return requestBody == null ? null : requestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
-                        return null;
-                    }
-                }
-
-//            {
 //                @Override
-//                public Map<String, String> getParams()
-//                {
-//                    Map<String, String>  params = new HashMap<String, String>();
-//                    params.put("access_token", id_token);
-//                    //params.put("domain", "http://itsalif.info");
-//                    Log.d("Params ID Token", id_token);
-//                    Log.d("Params", params.toString());
-//                    return params;
+//                public byte[] getBody() throws AuthFailureError {
+//                    try {
+//                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+//                    } catch (UnsupportedEncodingException uee) {
+//                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+//                        return null;
+//                    }
 //                }
-
+//
 //                @Override
 //                public Map<String, String> getHeaders() throws AuthFailureError {
 //                    Map<String,String> params = new HashMap<String, String>();
@@ -341,14 +316,20 @@ public class SignInActivity extends AppCompatActivity implements
 //                    Log.d("Params", params.toString());
 //                    return params;
 //                }
+//
+//
+//            };
+//            queue.add(postRequest);
+//
+//            CookieManager cmrCookieMan = new CookieManager(new MyCookieStore(this), CookiePolicy.ACCEPT_ALL);
+//            CookieHandler.setDefault(cmrCookieMan);
+//            Log.d(TAG, cmrCookieMan.toString());
 
-
-            };
-            queue.add(postRequest);
+            Log.d(TAG, "Started Display");
 
             mStatusTextView.setText(acct.getDisplayName());
-            
-            Toast.makeText(this, response_volley, Toast.LENGTH_LONG).show();
+
+            Log.d(TAG, "Ended Display");
 
             updateUI(true);
         } else {
@@ -452,6 +433,12 @@ public class SignInActivity extends AppCompatActivity implements
         }
     }
 
+    private void dashboard()
+    {
+        Intent intent1 = new Intent(SignInActivity.this, UserActivity.class);
+        startActivity(intent1);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -464,9 +451,11 @@ public class SignInActivity extends AppCompatActivity implements
             case R.id.disconnect_button:
                 revokeAccess();
                 break;
+//            case R.id.dashboard_button:
+//                dashboard();
+//                break;
         }
     }
-
 
 }
 

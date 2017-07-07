@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:2:1-23:12
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:2:1-29:12
 	package
 		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:3:5-38
 		INJECTED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml
@@ -18,7 +18,7 @@ ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:5:5-67
 	android:name
 		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:5:22-64
 application
-ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:7:5-21:19
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:7:5-27:19
 MERGED from [com.android.support:appcompat-v7:25.3.1] C:\Users\Bavana\.android\build-cache\cc0bbb66eeae0c6035c4169466e74864dc240ebc\output\AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:animated-vector-drawable:25.3.1] C:\Users\Bavana\.android\build-cache\689c5eb281c5c711ff2fc65e04a6bcf21d4c6012\output\AndroidManifest.xml:26:5-20
 MERGED from [com.android.support:support-vector-drawable:25.3.1] C:\Users\Bavana\.android\build-cache\51c16e7a32c61eafcba4bbaf1a38d12c39764f08\output\AndroidManifest.xml:26:5-20
@@ -60,6 +60,30 @@ category#android.intent.category.LAUNCHER
 ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:18:17-77
 	android:name
 		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:18:27-74
+activity#io.openchirp.androidapp.SignInActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:21:9-52
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:21:19-49
+activity#io.openchirp.androidapp.StringRequestActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:22:9-59
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:22:19-56
+activity#io.openchirp.androidapp.UserActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:23:9-50
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:23:19-47
+activity#io.openchirp.androidapp.ServicesActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:24:9-54
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:24:19-51
+activity#io.openchirp.androidapp.DevicesActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:25:9-53
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:25:19-50
+activity#io.openchirp.androidapp.LocationActivity
+ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:26:9-63
+	android:name
+		ADDED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml:26:19-51
 uses-sdk
 INJECTED from C:\08735\AndroidApp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:25.3.1] C:\Users\Bavana\.android\build-cache\cc0bbb66eeae0c6035c4169466e74864dc240ebc\output\AndroidManifest.xml:21:5-23:78

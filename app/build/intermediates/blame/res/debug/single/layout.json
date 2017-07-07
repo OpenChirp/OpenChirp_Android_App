@@ -4,6 +4,10 @@
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\abc_list_menu_item_radio.xml"
     },
     {
+        "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_user.xml",
+        "source": "C:\\08735\\AndroidApp\\app\\src\\main\\res\\layout\\activity_user.xml"
+    },
+    {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_mode_close_item_material.xml",
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\abc_action_mode_close_item_material.xml"
     },
@@ -14,6 +18,10 @@
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\select_dialog_item_material.xml",
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\select_dialog_item_material.xml"
+    },
+    {
+        "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_sign_in.xml",
+        "source": "C:\\08735\\AndroidApp\\app\\src\\main\\res\\layout\\activity_sign_in.xml"
     },
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_media.xml",
@@ -68,6 +76,10 @@
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\abc_screen_content_include.xml"
     },
     {
+        "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_location.xml",
+        "source": "C:\\08735\\AndroidApp\\app\\src\\main\\res\\layout\\activity_location.xml"
+    },
+    {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_chronometer.xml",
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\notification_template_part_chronometer.xml"
     },
@@ -82,6 +94,10 @@
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_list_menu_item_icon.xml",
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_devices.xml",
+        "source": "C:\\08735\\AndroidApp\\app\\src\\main\\res\\layout\\activity_devices.xml"
     },
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_media_custom.xml",
@@ -122,6 +138,10 @@
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_search_view.xml",
         "source": "C:\\Users\\Bavana\\.android\\build-cache\\cc0bbb66eeae0c6035c4169466e74864dc240ebc\\output\\res\\layout\\abc_search_view.xml"
+    },
+    {
+        "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_services.xml",
+        "source": "C:\\08735\\AndroidApp\\app\\src\\main\\res\\layout\\activity_services.xml"
     },
     {
         "merged": "C:\\08735\\AndroidApp\\app\\build\\intermediates\\res\\merged\\debug\\layout\\notification_template_part_time.xml",
